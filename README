@@ -1,14 +1,19 @@
 # wordy
 
-FIXME: write description
+analyze text patterns in web pages. at the moment, just word frequency/complexity
 
 ## Usage
 
-FIXME: write
+lein swank
+
+connect with emacs...
+
+(ns wordy.core)
+(graph-words "http://ethanjfast.com" 8)
 
 ## Installation
 
-FIXME: write
+TBD
 
 ## License
 
