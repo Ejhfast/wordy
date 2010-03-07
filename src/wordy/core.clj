@@ -14,7 +14,8 @@
 (defn rec-map [lst]
   (if (sequential? lst)
     (map #(if (map? %1)
-            (let [newc (%1 :content)]
+            (let [mytag (%1 :tag)
+                  newc (if (or (= mytag "script") (= mytag "link") (= mytag "a")) "" (%1 :content))]
               (trampoline rec-map newc))
             (if (sequential? %1)
               (trampoline rec-map %1)
