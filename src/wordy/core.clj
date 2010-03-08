@@ -11,11 +11,16 @@
 (defn url [name]
   (html-resource (URL. name)))
 
+(defn match [thing lst]
+  (reduce #(or %1 %2) (map #(= thing %1) lst)))
+
 (defn rec-map [lst]
   (if (sequential? lst)
     (map #(if (map? %1)
-            (let [mytag (%1 :tag)
-                  newc (if (or (= mytag "script") (= mytag "link") (= mytag "a")) "" (%1 :content))]
+            (let [mytag (str (%1 :tag))
+                  con (%1 :content)
+                  domatch (match mytag [":div" ":html" ":p" ":body"])
+                  newc (if domatch con "")]
               (trampoline rec-map newc))
             (if (sequential? %1)
               (trampoline rec-map %1)
@@ -62,15 +67,31 @@
 (defn long-words [lst num]
   (filter #(if (> (length (or (seq (first %1)) [])) num) true false) lst))
 
-(defn interesting [url num]
-  (take 10 (long-words (sortmap (count-words url)) num)))
+(defn interesting [data wdsize totake]
+  (take totake (long-words data wdsize)))
 
-(defn graph-words [url num]
-  (let [data (interesting url num)
-        words (map #(first %1) data)
-        numbers (map #(second %1) data)]
-    (view (bar-chart words numbers))))
+(defn graph-words [url nums nume step]
+  (let [raw (sortmap (count-words url))
+        rng (range nums (+ nume 1) step)
+        totake (/ 10 (length rng))
+        data (map #(interesting raw %1 totake) rng)
+        words (map #(map (fn [x] (first x)) %1) data)
+        numbers (map #(map (fn [x] (second x)) %1) data)
+        bigwords (reduce concat words)
+        prin (print bigwords "\n")
+        bignums (reduce concat numbers)
+        prin (print bignums "\n")
+        size (length (first words))
+        groups (reduce concat (map #(repeat size %1) rng))
+        prin (print groups "\n")]
+    (view (bar-chart bigwords bignums
+                     :x-label "Words"
+                     :y-label "Frequency"
+                     :title url
+                     :group-by groups))))
 
-(defn -main [url num]
-  (let [n (Integer/parseInt num)]
-		(graph-words url n)))
+(defn -main [url nums nume step]
+  (let [s (Integer/parseInt nums)
+        e (Integer/parseInt nume)
+        stp (Integer/parseInt step)]
+		(graph-words url s e stp)))
