@@ -4,8 +4,8 @@ analyze text patterns in web pages. at the moment, just word frequency/complexit
 
 ## Usage
 
-Run in command link:
-lein swank
+Run in command line:
+	lein swank
 
 Then, connect with emacs...
 
@@ -15,13 +15,14 @@ In slime run:
 
 
 Alternatively you can do:
-lein uberjar
-java -jar wordy-standalone.jar http://ethanjfast.com 5 5 1
+	lein uberjar
+	java -jar wordy-standalone.jar http://ethanjfast.com 5 5 1
 
 ## Installation
 
 Get leiningen.
-Run lein deps
+Run 
+	lein deps
 
 ## License
 
