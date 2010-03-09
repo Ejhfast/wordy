@@ -4,16 +4,24 @@ analyze text patterns in web pages. at the moment, just word frequency/complexit
 
 ## Usage
 
+Run in command link:
 lein swank
 
-connect with emacs...
+Then, connect with emacs...
 
+In slime run:
 (ns wordy.core)
-(graph-words "http://ethanjfast.com" 8)
+(graph-words "http://ethanjfast.com" 5 5 1)
+
+
+Alternatively you can do:
+lein uberjar
+java -jar wordy-standalone.jar http://ethanjfast.com 5 5 1
 
 ## Installation
 
-TBD
+Get leiningen.
+Run lein deps
 
 ## License
 
